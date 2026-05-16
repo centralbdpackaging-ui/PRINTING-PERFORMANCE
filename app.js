@@ -15,6 +15,7 @@ const State = {
   slideTimer: null,
   focusMachineIdx: 0,
   focusRotationTimer: null,
+  focusRotationSpeed: 3,
   enabledSlides: [0, 1, 2]
 };
 
@@ -262,56 +263,50 @@ function renderMachineGrid() {
 
   grid.innerHTML = State.data.machines.map(m => {
     const pct = m.target > 0 ? Math.round((m.prod / m.target) * 100) : 0;
-    const clampedPct = Math.min(pct, 100);
     const status = m.status ? m.status.toLowerCase() : 'idle';
 
-    let statusClass = 'tag-idle';
+    let cardType = 'orange'; // default idle
     let statusLabel = 'IDLE';
-    let prdColor = 'var(--accent-orange)';
-    let circleColor = '#f59e0b';
+    let statusIcon = '⏳';
 
     if (status.includes('run')) {
-      statusClass = 'tag-run'; statusLabel = 'RUNNING';
-      prdColor = 'var(--accent-green)'; circleColor = '#10b981';
+      cardType = 'green'; statusLabel = 'RUNNING'; statusIcon = '⚡';
     } else if (status.includes('break') || status.includes('bd')) {
-      statusClass = 'tag-bd'; statusLabel = 'BREAKDOWN';
-      prdColor = 'var(--accent-red)'; circleColor = '#ef4444';
+      cardType = 'red'; statusLabel = 'BREAKDOWN'; statusIcon = '🛑';
     }
 
-    // SVG circle: circumference of r=28 circle ≈ 175.9
-    const circ = 175.9;
-    const dash = (clampedPct / 100) * circ;
-    const gap  = circ - dash;
-
     const reasonLine = (m.reason && m.reason.trim())
-      ? `<div style="font-size:11px; margin-top:6px; padding:4px 10px; border-radius:6px; background:rgba(239,68,68,0.1); color:var(--accent-red); font-weight:700; text-align:center;">${m.reason}</div>`
+      ? `<div class="m-reason-tag">${m.reason}</div>`
       : '';
 
     return `
-      <div class="m-card-compact">
-        <div class="m-id-row">
-          <span class="m-id-text">${m.id}</span>
-          <span class="m-status-tag ${statusClass}">${statusLabel}</span>
-        </div>
-        <div class="m-body-compact">
-          <div class="m-circle-wrap">
-            <svg viewBox="0 0 70 70" width="90" height="90">
-              <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="7"/>
-              <circle cx="35" cy="35" r="28" fill="none" stroke="${circleColor}" stroke-width="7"
-                stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}"
-                stroke-linecap="round"
-                transform="rotate(-90 35 35)"
-                style="filter:drop-shadow(0 0 4px ${circleColor});"/>
-            </svg>
-            <div class="m-pct" style="color:${prdColor};">${pct}%</div>
-          </div>
-          <div class="m-info-compact">
-            <div class="m-val-p" style="color:${prdColor};">${m.prod.toLocaleString()} <span class="m-val-t" style="font-size:13px;">IMP</span></div>
-            <div class="m-val-t">TARGET: ${m.target.toLocaleString()} IMP</div>
-            ${m.lastUpdate ? `<div style="font-size:11px; color:var(--text-muted); margin-top:4px;">⏱ ${m.lastUpdate}</div>` : ''}
+      <div class="kpi-card ${cardType} m-card-full">
+        <div class="kpi-header">
+          <div class="m-id-text">${m.id}</div>
+          <div class="m-status-wrap">
+            <span class="m-status-dot"></span>
+            <span class="m-status-lbl">${statusLabel}</span>
           </div>
         </div>
-        ${reasonLine}
+        
+        <div class="m-content-row">
+          <div class="m-val-group">
+            <div class="m-prod-val">${m.prod.toLocaleString()} <span class="m-unit-s">KGS</span></div>
+            <div class="m-target-val">TARGET: ${m.target.toLocaleString()} KGS</div>
+          </div>
+          <div class="m-pct-box">
+             <svg viewBox="0 0 36 36" class="m-pct-svg">
+               <path class="m-pct-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+               <path class="m-pct-fill" stroke-dasharray="${pct}, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+             </svg>
+             <span class="m-pct-txt">${pct}%</span>
+          </div>
+        </div>
+
+        <div class="m-footer-row">
+          <div class="m-time">⏱ ${m.lastUpdate || '--:--'}</div>
+          ${reasonLine}
+        </div>
       </div>
     `;
   }).join('');
@@ -328,47 +323,57 @@ function renderFocusView() {
   const pct = m.target > 0 ? Math.round((m.prod / m.target) * 100) : 0;
   const status = m.status ? m.status.toLowerCase() : 'idle';
 
-  let statusClass = 'tag-idle';
+  let cardType = 'orange';
   let statusLabel = 'IDLE';
   let prdColor = 'var(--accent-orange)';
-  let circleColor = '#f59e0b';
 
   if (status.includes('run')) {
-    statusClass = 'tag-run'; statusLabel = 'RUNNING';
-    prdColor = 'var(--accent-green)'; circleColor = '#10b981';
+    cardType = 'green'; statusLabel = 'RUNNING'; prdColor = 'var(--accent-green)';
   } else if (status.includes('break') || status.includes('bd')) {
-    statusClass = 'tag-bd'; statusLabel = 'BREAKDOWN';
-    prdColor = 'var(--accent-red)'; circleColor = '#ef4444';
+    cardType = 'red'; statusLabel = 'BREAKDOWN'; prdColor = 'var(--accent-red)';
   }
 
-  const circ = 1005.3; // r=160
-  const dash = (Math.min(pct, 100) / 100) * circ;
-  const gap  = circ - dash;
-
   container.innerHTML = `
-    <div class="focus-card">
-      <div class="focus-head">
-        <span class="focus-id">${m.id}</span>
-        <span class="focus-status" style="color:${circleColor}; border-color:${circleColor};">${statusLabel}</span>
+    <div class="focus-card-premium ${cardType}">
+      <div class="focus-header-p">
+        <div class="focus-id-large">${m.id}</div>
+        <div class="focus-status-badge">
+          <span class="focus-pulse-dot"></span>
+          <span>${statusLabel}</span>
+        </div>
+        <div class="focus-update-time">⏱ UPDATED: ${m.lastUpdate || '--:--:--'}</div>
       </div>
-      <div class="focus-body">
-        <div class="focus-circle-wrap">
-          <svg viewBox="0 0 400 400" width="350" height="350">
-            <circle cx="200" cy="200" r="160" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="25"/>
-            <circle cx="200" cy="200" r="160" fill="none" stroke="${circleColor}" stroke-width="25"
-              stroke-dasharray="${dash} ${gap}"
-              stroke-linecap="round"
-              transform="rotate(-90 200 200)"
-              style="filter:drop-shadow(0 0 15px ${circleColor}); transition: stroke-dasharray 1s ease-out;"/>
-          </svg>
-          <div class="focus-pct" style="color:${prdColor};">${pct}%</div>
+
+      <div class="focus-body-p">
+        <div class="focus-gauge-area">
+          <div class="focus-gauge-wrap">
+            <svg viewBox="0 0 100 100" class="focus-gauge-svg">
+              <circle class="focus-gauge-bg" cx="50" cy="50" r="45" />
+              <circle class="focus-gauge-fill" cx="50" cy="50" r="45" 
+                style="stroke-dasharray: ${pct * 2.82}, 282.7; filter: drop-shadow(0 0 10px ${prdColor});" />
+            </svg>
+            <div class="focus-gauge-info">
+              <div class="focus-gauge-pct">${pct}%</div>
+              <div class="focus-gauge-lbl">ACHIEVEMENT</div>
+            </div>
+          </div>
         </div>
-        <div class="focus-info">
-          <div class="focus-val-p" style="color:${prdColor};" id="focus-count-prod">0</div>
-          <div class="focus-val-t">TARGET: ${m.target.toLocaleString()} IMP</div>
-          <div style="font-size:24px; color:var(--text-muted); font-weight:700;">⏱ Last Update: ${m.lastUpdate || '--:--:--'}</div>
-          ${m.reason ? `<div class="focus-reason">${m.reason}</div>` : ''}
+
+        <div class="focus-stats-area">
+          <div class="focus-stat-block">
+            <div class="focus-stat-label">PRODUCTION UNITS</div>
+            <div class="focus-stat-number" id="focus-count-prod" style="color:${prdColor}">0</div>
+          </div>
+          <div class="focus-stat-block">
+            <div class="focus-stat-label">DAILY TARGET</div>
+            <div class="focus-stat-number dim">${m.target.toLocaleString()} <span style="font-size:32px;">KGS</span></div>
+          </div>
+          ${m.reason ? `<div class="focus-reason-tag">REASON: ${m.reason}</div>` : ''}
         </div>
+      </div>
+
+      <div class="focus-footer-p">
+        <div class="focus-prog-text">MACHINE MONITORING ${State.focusMachineIdx + 1} OF ${State.data.machines.length}</div>
       </div>
     </div>
   `;
@@ -386,10 +391,10 @@ function animateValue(id, start, end, duration) {
   const timer = setInterval(() => {
     current += increment;
     if ((increment > 0 && current >= end) || (increment === 0)) {
-      obj.textContent = end.toLocaleString() + " IMP";
+      obj.textContent = end.toLocaleString() + " KGS";
       clearInterval(timer);
     } else {
-      obj.textContent = current.toLocaleString() + " IMP";
+      obj.textContent = current.toLocaleString() + " KGS";
     }
   }, 16);
 }
@@ -398,10 +403,15 @@ function startFocusRotation() {
   if (State.focusRotationTimer) clearInterval(State.focusRotationTimer);
   State.focusRotationTimer = setInterval(() => {
     if (State.currentSlide === 2 && !State.isPaused) {
-      State.focusMachineIdx = (State.focusMachineIdx + 1) % State.data.machines.length;
-      renderFocusView();
+      if (State.focusMachineIdx >= State.data.machines.length - 1) {
+        // Completed all machines, return to home
+        goToSlide(0);
+      } else {
+        State.focusMachineIdx++;
+        renderFocusView();
+      }
     }
-  }, 3000); // 3 seconds per machine
+  }, State.focusRotationSpeed * 1000);
 }
 
 // =============================================
@@ -593,6 +603,55 @@ function setupEventListeners() {
       a.click();
     };
   }
+  // ── Focus Rotation Speed ──
+  const focusSpeedRange = document.getElementById('focusSpeedRange');
+  const focusSpeedVal   = document.getElementById('focusSpeedVal');
+  if (focusSpeedRange) {
+    focusSpeedRange.oninput = () => {
+      const v = parseInt(focusSpeedRange.value);
+      focusSpeedVal.innerText = v + 's';
+      State.focusRotationSpeed = v;
+      if (State.currentSlide === 2) startFocusRotation();
+    };
+  }
+
+  // ── Resolution Preset ──
+  const resPreset = document.getElementById('resPreset');
+  if (resPreset && zoomRange && zoomVal) {
+    resPreset.onchange = () => {
+      const v = resPreset.value;
+      zoomRange.value = v;
+      zoomVal.innerText = v + '%';
+      document.body.style.zoom = (v / 100);
+    };
+  }
+
+  // ── Theme Customizer ──
+  const themePrimary = document.getElementById('themePrimary');
+  const themeSuccess = document.getElementById('themeSuccess');
+  const themeWarning = document.getElementById('themeWarning');
+  const themeDanger  = document.getElementById('themeDanger');
+  const resetTheme   = document.getElementById('resetThemeBtn');
+
+  const updateCSSVar = (name, val) => document.documentElement.style.setProperty(name, val);
+
+  if (themePrimary) themePrimary.oninput = () => updateCSSVar('--accent-blue', themePrimary.value);
+  if (themeSuccess) themeSuccess.oninput = () => updateCSSVar('--accent-green', themeSuccess.value);
+  if (themeWarning) themeWarning.oninput = () => updateCSSVar('--accent-orange', themeWarning.value);
+  if (themeDanger)  themeDanger.oninput  = () => updateCSSVar('--accent-red', themeDanger.value);
+
+  if (resetTheme) {
+    resetTheme.onclick = () => {
+      updateCSSVar('--accent-blue', '#3b82f6');
+      updateCSSVar('--accent-green', '#10b981');
+      updateCSSVar('--accent-orange', '#f59e0b');
+      updateCSSVar('--accent-red', '#ef4444');
+      if (themePrimary) themePrimary.value = '#3b82f6';
+      if (themeSuccess) themeSuccess.value = '#10b981';
+      if (themeWarning) themeWarning.value = '#f59e0b';
+      if (themeDanger)  themeDanger.value  = '#ef4444';
+    };
+  }
 
   // ── Test Live Data ──
   const testBtn  = document.getElementById('testLiveBtn');
@@ -614,13 +673,13 @@ function setupEventListeners() {
           connDot.style.background = 'var(--accent-green)';
           connDot.style.boxShadow = '0 0 8px var(--accent-green)';
           connMsg.style.color = 'var(--accent-green)';
-          connMsg.innerText = `✅ Live data connection successful! (${json.rawData.length} rows)`;
+          connMsg.innerText = `✅ Sync Successful! (${json.rawData.length} rows)`;
         }
       } catch (err) {
         connDot.style.background = 'var(--accent-red)';
         connDot.style.boxShadow = '0 0 8px var(--accent-red)';
         connMsg.style.color = 'var(--accent-red)';
-        connMsg.innerText = '❌ Connection failed: ' + err.message;
+        connMsg.innerText = '❌ Failed: ' + err.message;
       } finally {
         testBtn.disabled = false;
         testBtn.style.opacity = '1';
@@ -629,7 +688,11 @@ function setupEventListeners() {
   }
 
   // Start auto-slide
-  startAutoSlide(15);
+  startAutoSlide(300);
+
+  // Set initial ticker duration
+  const ticker = document.querySelector('.ticker');
+  if (ticker) ticker.style.animationDuration = '300s';
 }
 
 document.addEventListener('DOMContentLoaded', init);

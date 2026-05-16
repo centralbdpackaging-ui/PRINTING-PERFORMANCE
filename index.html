@@ -18,8 +18,8 @@
           <div class="logo-wrap">
             <svg class="icon-s" style="color:var(--accent-blue)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
             <div>
-              <div class="logo" id="mainTitle">PRINTING PERFORMANCE <span style="font-size: 10px; opacity: 0.5;">v2.1</span></div>
-              <div class="sub-logo">Printing Unit Dashboard 2026</div>
+              <div class="logo" id="mainTitle">PRODUCTION PERFORMANCE <span style="font-size: 10px; opacity: 0.5;">v2.1</span></div>
+              <div class="sub-logo">Extrusion & Zipper Dashboard 2026</div>
             </div>
           </div>
         </div>
@@ -77,7 +77,7 @@
                 </div>
                 <div class="kpi-val-group">
                    <div class="kpi-val" id="sum-total-target">210,000</div>
-                   <div class="kpi-unit">IMP</div>
+                   <div class="kpi-unit">KGS</div>
                 </div>
                 <div class="kpi-sub">Today's Target</div>
                 <svg class="kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0,25 Q10,15 20,20 T40,10 T60,25 T80,5 T100,20" fill="none" stroke="var(--accent-blue)" stroke-width="1.5" opacity="0.6"/></svg>
@@ -92,7 +92,7 @@
                 </div>
                 <div class="kpi-val-group">
                    <div class="kpi-val" id="sum-total-prod">0</div>
-                   <div class="kpi-unit">IMP</div>
+                   <div class="kpi-unit">KGS</div>
                 </div>
                 <div class="kpi-sub">Total Production</div>
                 <svg class="kpi-sparkline" viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0,20 Q15,25 30,15 T50,20 T70,10 T85,25 T100,15" fill="none" stroke="var(--accent-green)" stroke-width="1.5" opacity="0.6"/></svg>
@@ -142,7 +142,7 @@
               <!-- Panel 1: Hourly Production Trend -->
               <div class="panel">
                 <div class="panel-head">
-                  <div class="panel-title">HOURLY PRODUCTION TREND (IMP)</div>
+                  <div class="panel-title">HOURLY PRODUCTION TREND (KGS)</div>
                   <div style="display:flex; gap:15px; font-size:11px; font-weight:700;">
                     <div style="display:flex; align-items:center; gap:5px;"><div style="width:12px; height:3px; background:var(--accent-green); border-radius:2px;"></div><span>Production</span></div>
                     <div style="display:flex; align-items:center; gap:5px;"><div style="width:12px; height:3px; background:var(--accent-blue); border-radius:2px; border-top:1px dashed #fff;"></div><span>Target</span></div>
@@ -182,7 +182,7 @@
               <!-- Panel 2: Target vs Production -->
               <div class="panel">
                 <div class="panel-head">
-                  <div class="panel-title">TARGET vs PRODUCTION (IMP)</div>
+                  <div class="panel-title">TARGET vs PRODUCTION (KGS)</div>
                   <div style="display:flex; gap:15px; font-size:11px; font-weight:700;">
                     <div style="display:flex; align-items:center; gap:5px;"><div style="width:12px; height:12px; background:var(--accent-blue); border-radius:3px;"></div><span>Target</span></div>
                     <div style="display:flex; align-items:center; gap:5px;"><div style="width:12px; height:12px; background:var(--accent-green); border-radius:3px;"></div><span>Production</span></div>
@@ -231,11 +231,11 @@
                    <div style="display:flex; flex-direction:column; gap:12px;">
                       <div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;">
                         <div style="width:10px; height:10px; border-radius:2px; background:var(--accent-red);"></div>
-                        <span>Mechanical</span>
+                        <span>Extrusion</span>
                       </div>
                       <div style="display:flex; align-items:center; gap:10px; font-size:14px; font-weight:700;">
                         <div style="width:10px; height:10px; border-radius:2px; background:var(--accent-blue);"></div>
-                        <span>Electrical</span>
+                        <span>Zipper</span>
                       </div>
                    </div>
                 </div>
@@ -259,14 +259,7 @@
 
           <!-- Slide 1: Machine Wise Production Status -->
           <section class="slide" id="slide-1">
-            <div class="section-block">
-              <div class="section-head">
-                <div class="section-title">PRINTING MACHINES - PRODUCTION STATUS</div>
-                <div class="header-info-item" style="border:none;">
-                  <span class="header-info-lbl">VIEWING</span>
-                  <span class="header-info-val">ALL UNITS</span>
-                </div>
-              </div>
+            <div class="section-block" style="border:none; background:transparent; box-shadow:none; padding:0;">
               <div class="m-grid-compact" id="machine-grid">
                 <!-- Machine cards will be injected here -->
               </div>
@@ -299,90 +292,103 @@
     <aside id="settingsModal" class="side-panel">
       <div class="modal-box">
         <div class="modal-header">
-          <h3 style="color:var(--accent-blue); font-size:15px; letter-spacing:1px;">DASHBOARD CONTROLLER</h3>
-          <button id="closeModalBtn" style="background:none; border:none; color:white; font-size:24px; cursor:pointer; line-height:1;">&times;</button>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div style="width:4px; height:20px; background:var(--accent-blue); border-radius:2px; box-shadow:0 0 10px var(--accent-blue);"></div>
+            <h3 style="color:#fff; font-size:16px; letter-spacing:1px; font-weight:900;">DASHBOARD CONTROLLER</h3>
+          </div>
+          <button id="closeModalBtn" class="close-btn-p">&times;</button>
         </div>
 
         <div class="modal-body">
-
-          <!-- Slide Toggles -->
-          <div class="setting-item">
-            <div class="slide-toggle-item">
-              <input type="checkbox" id="toggle-slide-0" checked>
-              <span>Performance Overview</span>
-            </div>
-            <div class="slide-toggle-item">
-              <input type="checkbox" id="toggle-slide-1" checked>
-              <span>Printing Machines</span>
-            </div>
-            <div class="slide-toggle-item">
-              <input type="checkbox" id="toggle-slide-2" checked>
-              <span>Focus Presentation</span>
+          
+          <!-- Section 1: Visibility -->
+          <div class="settings-card">
+            <div class="s-card-title">SLIDE VISIBILITY</div>
+            <div class="s-card-content grid-2">
+              <label class="toggle-p"><input type="checkbox" id="toggle-slide-0" checked><span>Summary</span></label>
+              <label class="toggle-p"><input type="checkbox" id="toggle-slide-1" checked><span>Machines</span></label>
+              <label class="toggle-p"><input type="checkbox" id="toggle-slide-2" checked><span>Focus</span></label>
             </div>
           </div>
 
-          <hr style="border:none; border-top:1px solid var(--border); margin: 5px 0;">
-
-          <!-- Language -->
-          <div class="setting-item">
-            <label>Language</label>
-            <select id="languageSel" class="st-input" style="width:100%;">
-              <option value="en">English</option>
-              <option value="bn">বাংলা (Bengali)</option>
-            </select>
-          </div>
-
-          <!-- Zoom Level -->
-          <div class="setting-item">
-            <div class="st-label-row">
-              <label>Zoom Level</label>
-              <span id="zoomVal" style="color:var(--accent-blue); font-weight:900;">100%</span>
-            </div>
-            <input id="zoomRange" type="range" min="50" max="150" value="100" class="st-range">
-          </div>
-
-          <!-- Slide Speed -->
-          <div class="setting-item">
-            <div class="st-label-row">
-              <label>Slide Speed</label>
-              <span id="slideSpeedVal" style="color:var(--accent-blue); font-weight:900;">15s</span>
-            </div>
-            <input id="slideSpeedRange" type="range" min="5" max="120" value="15" class="st-range">
-          </div>
-
-          <!-- Scroll Speed -->
-          <div class="setting-item">
-            <div class="st-label-row">
-              <label>Scroll Speed</label>
-              <span id="scrollSpeedVal" style="color:var(--accent-blue); font-weight:900;">60s</span>
-            </div>
-            <input id="scrollSpeedRange" type="range" min="10" max="120" value="60" class="st-range">
-          </div>
-
-          <!-- Enable Auto-Slide -->
-          <div class="setting-item">
-            <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.03); border:1px solid var(--border); border-radius:8px; padding:10px 15px;">
-              <label style="font-size:14px; font-weight:700; color:#fff; cursor:pointer;" for="autoSlideCheck">Enable Auto-Slide</label>
-              <input type="checkbox" id="autoSlideCheck" checked style="width:18px; height:18px; cursor:pointer; accent-color:var(--accent-blue);">
+          <!-- Section 2: Display & Theme -->
+          <div class="settings-card">
+            <div class="s-card-title">DISPLAY & THEME</div>
+            <div class="s-card-content">
+              <div class="s-item">
+                <label>Resolution Preset</label>
+                <select id="resPreset" class="st-input">
+                  <option value="100">Default (100%)</option>
+                  <option value="80">HD (80%)</option>
+                  <option value="125">Large (125%)</option>
+                  <option value="150">Ultra (150%)</option>
+                </select>
+              </div>
+              <div class="s-item">
+                <div class="st-label-row">
+                  <label>Custom Zoom</label>
+                  <span id="zoomVal">100%</span>
+                </div>
+                <input id="zoomRange" type="range" min="50" max="200" value="100" class="st-range">
+              </div>
+              <div class="s-item">
+                <label>Accent Color</label>
+                <div style="display:flex; gap:10px; margin-top:5px;">
+                  <input type="color" id="themePrimary" value="#3b82f6" class="color-pick">
+                  <input type="color" id="themeSuccess" value="#10b981" class="color-pick">
+                  <input type="color" id="themeWarning" value="#f59e0b" class="color-pick">
+                  <input type="color" id="themeDanger" value="#ef4444" class="color-pick">
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- Action Buttons -->
-          <div class="modal-footer-btns">
-            <button id="exportConfigBtn" class="btn-st">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-              Export Config
-            </button>
-            <button id="testLiveBtn" class="btn-st">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px; height:20px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-              Test Live Data
-            </button>
+          <!-- Section 3: Timing -->
+          <div class="settings-card">
+            <div class="s-card-title">TIMING & ROTATION</div>
+            <div class="s-card-content">
+              <div class="s-item">
+                <div class="st-label-row">
+                  <label>Slide Rotation</label>
+                  <span id="slideSpeedVal">300s</span>
+                </div>
+                <input id="slideSpeedRange" type="range" min="5" max="600" value="300" class="st-range">
+              </div>
+              <div class="s-item">
+                <div class="st-label-row">
+                  <label>Scroll Speed</label>
+                  <span id="scrollSpeedVal">300s</span>
+                </div>
+                <input id="scrollSpeedRange" type="range" min="5" max="600" value="300" class="st-range">
+              </div>
+              <div class="s-item">
+                <div class="st-label-row">
+                  <label>Focus Rotation</label>
+                  <span id="focusSpeedVal">3s</span>
+                </div>
+                <input id="focusSpeedRange" type="range" min="1" max="20" value="3" class="st-range">
+              </div>
+              <label class="toggle-p wide"><input type="checkbox" id="autoSlideCheck" checked><span>Enable Auto-Slide Rotation</span></label>
+            </div>
           </div>
 
-          <!-- Connection Status -->
-          <div id="connectionStatus" style="display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700; color:var(--text-muted); padding:8px 0;">
-            <span id="connDot" style="width:8px; height:8px; border-radius:50%; background:var(--text-muted); flex-shrink:0;"></span>
-            <span id="connMsg">Not tested yet</span>
+          <!-- Section 4: Actions -->
+          <div class="settings-card no-bg">
+            <div class="modal-footer-btns">
+              <button id="exportConfigBtn" class="btn-p">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                Export
+              </button>
+              <button id="testLiveBtn" class="btn-p success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                Test Sync
+              </button>
+              <button id="resetThemeBtn" class="btn-p danger">Reset</button>
+            </div>
+            <div id="connectionStatus" class="conn-status">
+              <span id="connDot"></span>
+              <span id="connMsg">Sync Status: Ready</span>
+            </div>
           </div>
 
         </div>
