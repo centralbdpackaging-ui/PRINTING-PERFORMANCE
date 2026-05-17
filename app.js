@@ -86,6 +86,12 @@ function processRawData(response) {
     });
   });
 
+  processed.machines.sort((a, b) => {
+    const pctA = a.target > 0 ? (a.prod / a.target) : 0;
+    const pctB = b.target > 0 ? (b.prod / b.target) : 0;
+    return pctB - pctA;
+  });
+
   return processed;
 }
 
@@ -353,7 +359,7 @@ function renderFocusView() {
                 style="stroke-dasharray: ${pct * 2.82}, 282.7; filter: drop-shadow(0 0 10px ${prdColor});" />
             </svg>
             <div class="focus-gauge-info">
-              <div class="focus-gauge-pct">${pct}%</div>
+              <div class="focus-gauge-pct" id="focus-count-pct">0%</div>
               <div class="focus-gauge-lbl">ACHIEVEMENT</div>
             </div>
           </div>
@@ -379,22 +385,29 @@ function renderFocusView() {
   `;
 
   // Animate the production count
-  animateValue("focus-count-prod", 0, m.prod, 1000);
+  animateValue("focus-count-prod", 0, m.prod, 1000, " MTR");
+  animateValue("focus-count-pct", 0, pct, 1000, "%");
 }
 
-function animateValue(id, start, end, duration) {
+function animateValue(id, start, end, duration, suffix = "") {
   const obj = document.getElementById(id);
   if (!obj) return;
   const range = end - start;
   let current = start;
-  const increment = end > start ? Math.ceil(range / (duration / 16)) : 0;
+  
+  if (range === 0) {
+    obj.textContent = end.toLocaleString() + suffix;
+    return;
+  }
+  
+  const increment = Math.max(1, Math.ceil(range / (duration / 16)));
   const timer = setInterval(() => {
     current += increment;
-    if ((increment > 0 && current >= end) || (increment === 0)) {
-      obj.textContent = end.toLocaleString() + " MTR";
+    if (current >= end) {
+      obj.textContent = end.toLocaleString() + suffix;
       clearInterval(timer);
     } else {
-      obj.textContent = current.toLocaleString() + " MTR";
+      obj.textContent = current.toLocaleString() + suffix;
     }
   }, 16);
 }
