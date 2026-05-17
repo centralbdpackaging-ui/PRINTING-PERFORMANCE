@@ -291,8 +291,8 @@ function renderMachineGrid() {
         
         <div class="m-content-row">
           <div class="m-val-group">
-            <div class="m-prod-val">${m.prod.toLocaleString()} <span class="m-unit-s">KGS</span></div>
-            <div class="m-target-val">TARGET: ${m.target.toLocaleString()} KGS</div>
+            <div class="m-prod-val">${m.prod.toLocaleString()} <span class="m-unit-s">MTR</span></div>
+            <div class="m-target-val">TARGET: ${m.target.toLocaleString()} MTR</div>
           </div>
           <div class="m-pct-box">
              <svg viewBox="0 0 36 36" class="m-pct-svg">
@@ -366,7 +366,7 @@ function renderFocusView() {
           </div>
           <div class="focus-stat-block">
             <div class="focus-stat-label">DAILY TARGET</div>
-            <div class="focus-stat-number dim">${m.target.toLocaleString()} <span style="font-size:32px;">KGS</span></div>
+            <div class="focus-stat-number dim">${m.target.toLocaleString()} <span style="font-size:32px;">MTR</span></div>
           </div>
           ${m.reason ? `<div class="focus-reason-tag">REASON: ${m.reason}</div>` : ''}
         </div>
@@ -391,10 +391,10 @@ function animateValue(id, start, end, duration) {
   const timer = setInterval(() => {
     current += increment;
     if ((increment > 0 && current >= end) || (increment === 0)) {
-      obj.textContent = end.toLocaleString() + " KGS";
+      obj.textContent = end.toLocaleString() + " MTR";
       clearInterval(timer);
     } else {
-      obj.textContent = current.toLocaleString() + " KGS";
+      obj.textContent = current.toLocaleString() + " MTR";
     }
   }, 16);
 }
