@@ -387,6 +387,16 @@ body.settings-open .side-panel { right: 0; }
 .color-pick { width: 35px; height: 35px; border-radius: 8px; border: 2px solid rgba(255,255,255,0.1); background: none; cursor: pointer; padding: 0; overflow: hidden; }
 .color-pick::-webkit-color-swatch { border: none; }
 
+/* Range Buttons */
+.range-btn {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; font-weight: bold; transition: 0.2s; flex-shrink: 0;
+}
+.range-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); }
+.range-btn:active { transform: scale(0.95); }
+
 /* Buttons */
 .modal-footer-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .btn-p {

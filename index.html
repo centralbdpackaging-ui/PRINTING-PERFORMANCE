@@ -350,23 +350,35 @@
               <div class="s-item">
                 <div class="st-label-row">
                   <label>Slide Rotation</label>
-                  <span id="slideSpeedVal">300s</span>
+                  <span id="slideSpeedVal">20s</span>
                 </div>
-                <input id="slideSpeedRange" type="range" min="5" max="600" value="300" class="st-range">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <button id="slideSpeedDec" class="range-btn">-</button>
+                  <input id="slideSpeedRange" type="range" min="5" max="600" value="20" class="st-range" style="flex:1;">
+                  <button id="slideSpeedInc" class="range-btn">+</button>
+                </div>
               </div>
               <div class="s-item">
                 <div class="st-label-row">
                   <label>Scroll Speed</label>
                   <span id="scrollSpeedVal">300s</span>
                 </div>
-                <input id="scrollSpeedRange" type="range" min="5" max="600" value="300" class="st-range">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <button id="scrollSpeedDec" class="range-btn">-</button>
+                  <input id="scrollSpeedRange" type="range" min="5" max="600" value="300" class="st-range" style="flex:1;">
+                  <button id="scrollSpeedInc" class="range-btn">+</button>
+                </div>
               </div>
               <div class="s-item">
                 <div class="st-label-row">
                   <label>Focus Rotation</label>
                   <span id="focusSpeedVal">3s</span>
                 </div>
-                <input id="focusSpeedRange" type="range" min="1" max="20" value="3" class="st-range">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <button id="focusSpeedDec" class="range-btn">-</button>
+                  <input id="focusSpeedRange" type="range" min="1" max="20" value="3" class="st-range" style="flex:1;">
+                  <button id="focusSpeedInc" class="range-btn">+</button>
+                </div>
               </div>
               <label class="toggle-p wide"><input type="checkbox" id="autoSlideCheck" checked><span>Enable Auto-Slide Rotation</span></label>
             </div>

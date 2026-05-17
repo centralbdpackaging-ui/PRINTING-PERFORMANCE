@@ -550,24 +550,38 @@ function setupEventListeners() {
   // ── Slide Speed ──
   const slideSpeedRange = document.getElementById('slideSpeedRange');
   const slideSpeedVal   = document.getElementById('slideSpeedVal');
+  const slideSpeedDec   = document.getElementById('slideSpeedDec');
+  const slideSpeedInc   = document.getElementById('slideSpeedInc');
+  
+  const updateSlideSpeed = (val) => {
+    slideSpeedRange.value = val;
+    slideSpeedVal.innerText = val + 's';
+    startAutoSlide(val);
+  };
+  
   if (slideSpeedRange) {
-    slideSpeedRange.oninput = () => {
-      const v = parseInt(slideSpeedRange.value);
-      slideSpeedVal.innerText = v + 's';
-      startAutoSlide(v);
-    };
+    slideSpeedRange.oninput = () => updateSlideSpeed(parseInt(slideSpeedRange.value));
+    if (slideSpeedDec) slideSpeedDec.onclick = () => updateSlideSpeed(Math.max(parseInt(slideSpeedRange.min), parseInt(slideSpeedRange.value) - 1));
+    if (slideSpeedInc) slideSpeedInc.onclick = () => updateSlideSpeed(Math.min(parseInt(slideSpeedRange.max), parseInt(slideSpeedRange.value) + 1));
   }
 
   // ── Scroll Speed (ticker) ──
   const scrollSpeedRange = document.getElementById('scrollSpeedRange');
   const scrollSpeedVal   = document.getElementById('scrollSpeedVal');
+  const scrollSpeedDec   = document.getElementById('scrollSpeedDec');
+  const scrollSpeedInc   = document.getElementById('scrollSpeedInc');
+
+  const updateScrollSpeed = (val) => {
+    scrollSpeedRange.value = val;
+    scrollSpeedVal.innerText = val + 's';
+    const ticker = document.querySelector('.ticker');
+    if (ticker) ticker.style.animationDuration = val + 's';
+  };
+
   if (scrollSpeedRange) {
-    scrollSpeedRange.oninput = () => {
-      const v = parseInt(scrollSpeedRange.value);
-      scrollSpeedVal.innerText = v + 's';
-      const ticker = document.querySelector('.ticker');
-      if (ticker) ticker.style.animationDuration = v + 's';
-    };
+    scrollSpeedRange.oninput = () => updateScrollSpeed(parseInt(scrollSpeedRange.value));
+    if (scrollSpeedDec) scrollSpeedDec.onclick = () => updateScrollSpeed(Math.max(parseInt(scrollSpeedRange.min), parseInt(scrollSpeedRange.value) - 1));
+    if (scrollSpeedInc) scrollSpeedInc.onclick = () => updateScrollSpeed(Math.min(parseInt(scrollSpeedRange.max), parseInt(scrollSpeedRange.value) + 1));
   }
 
   // ── Auto-Slide Toggle ──
@@ -606,13 +620,20 @@ function setupEventListeners() {
   // ── Focus Rotation Speed ──
   const focusSpeedRange = document.getElementById('focusSpeedRange');
   const focusSpeedVal   = document.getElementById('focusSpeedVal');
+  const focusSpeedDec   = document.getElementById('focusSpeedDec');
+  const focusSpeedInc   = document.getElementById('focusSpeedInc');
+
+  const updateFocusSpeed = (val) => {
+    focusSpeedRange.value = val;
+    focusSpeedVal.innerText = val + 's';
+    State.focusRotationSpeed = val;
+    if (State.currentSlide === 2) startFocusRotation();
+  };
+
   if (focusSpeedRange) {
-    focusSpeedRange.oninput = () => {
-      const v = parseInt(focusSpeedRange.value);
-      focusSpeedVal.innerText = v + 's';
-      State.focusRotationSpeed = v;
-      if (State.currentSlide === 2) startFocusRotation();
-    };
+    focusSpeedRange.oninput = () => updateFocusSpeed(parseInt(focusSpeedRange.value));
+    if (focusSpeedDec) focusSpeedDec.onclick = () => updateFocusSpeed(Math.max(parseInt(focusSpeedRange.min), parseInt(focusSpeedRange.value) - 1));
+    if (focusSpeedInc) focusSpeedInc.onclick = () => updateFocusSpeed(Math.min(parseInt(focusSpeedRange.max), parseInt(focusSpeedRange.value) + 1));
   }
 
   // ── Resolution Preset ──
@@ -688,7 +709,7 @@ function setupEventListeners() {
   }
 
   // Start auto-slide
-  startAutoSlide(300);
+  startAutoSlide(20);
 
   // Set initial ticker duration
   const ticker = document.querySelector('.ticker');
